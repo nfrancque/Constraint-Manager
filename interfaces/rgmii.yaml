@@ -1,0 +1,124 @@
+# Values that are fixed for a given part implementing this interface.
+# Commonly setup and hold time
+part_constants:
+  tsu:
+    desc: Destination device setup time requirement  
+    default: -0.900
+  thd:
+    desc: Destination device hold time requirement 
+    default: 2.700
+  dv_bre:
+    desc: Data valid before rising edge of clock in ns
+    default: 7.660
+  dv_are:
+    desc: Data valid after rising edge of clock in ns
+    default: 27.789
+# Variables required to be input on a new board/FPGA/ASIC to complete the constraints
+# Commonly trace delays and clock periods
+# Can also be utils variables like an sdc get to be inserted into a create_generated_clock command
+# Anything that will be needed in each design can be used here
+dsn_variables:
+  tx_trce_dly_max:
+    desc: Maximum board trace delay (actually clock-data skew) 
+    default: 0.786
+  tx_trce_dly_min:
+    desc:  Minimum board trace delay (actually clock-data skew)
+    default: -0.973
+  rx_clk_period:
+    desc: Clock period in ns of the rx clock
+    default: 5
+  rx_clk_name:
+    desc: Desired name of rx clock
+    default: rgmii_rx_clk
+  tx_clk_name:
+    desc: Desired name of rx clock
+    default: rgmii_tx_clk  
+  tx_src_clk_name:
+    desc: Name of tx src clk to use for generating tx clock
+    default: master_clock   
+  tx_clk_dst_cell_cmd:
+    desc: SDC command to get location of tx clock
+    default: get_pins path/to/clk/start   
+  tx_clk_divide_by:
+    desc: Divider between tx src clk and tx clk
+    default: 1  
+  rx_src_clk_name:
+    desc: Name of rx src clk to use for generating tx clock
+    default: master_clock   
+  rx_clk_dst_cell_cmd:
+    desc: SDC command to get location of rx clock
+    default: get_pins path/to/clk/start  
+  rx_clk_divide_by:
+    desc: Divider between tx src clk and rx clk
+    default: 1  
+
+# Signals of this interface.  Provide a generic name and 
+# each design will provide a mapping of their signals to your generic names
+# These can be referenced as variables in all constraints
+signals:
+  - RGMII_RXD[*]
+  - RGMII_RX_CTRL
+  - RGMII_RX_CLK
+  - RGMII_TX_CLK
+  - RGMII_TXD[*]
+  - RGMII_TX_CTRL
+
+# Signal groups.  Provide a group name and its constituent signals.
+# These groups can be used as variables in constraints
+signal_groups:
+  output_ports: RGMII_RXD[*] RGMII_RX_CTRL
+  input_ports: RGMII_TXD[*] RGMII_TX_CTRL
+
+
+
+
+# Constraints to generate 
+# Each type of constraint requires different inputs
+# in terms of the variables supplied above.
+# Framework will perform substitution, just give variable names
+constraints:
+  # misc:
+    # ex: run_sdc_cmd $dsn_var [get_clocks $dsn_clk_var]
+  generated_clk:
+    tx:
+      clk: $tx_clk_name
+      src_clk_name: $tx_src_clk_name
+      dst_cell_cmd: $tx_clk_dst_cell_cmd
+      divide_by: $tx_clk_divide_by
+    rx:
+      clk_name: $rx_clk_name
+      src_clk_name: $rx_src_clk_name
+      dst_cell_cmd: $rx_clk_dst_cell_cmd
+      divide_by: $rx_clk_divide_by
+  in_max:
+    rx:
+      equation: $rx_clk_period-$dv_bre
+      signal_group: $input_ports
+      clk_name: $rx_clk_name
+  out_max:
+    tx:
+      equation: $trce_dly_max + $tsu
+      signal_group: $output_ports
+      clk_name: $tx_clk_name
+  in_min:
+    equation: $dv_are
+    signal_group: $input_ports
+    clk_name: $rx_clk_name
+  out_min:
+    tx:
+      equation: $trce_dly_min - $thd
+      signal_group: $output_ports
+      clk_name: $tx_clk_name
+  mult_path:
+    tx:
+      from: get_clocks $rx_clk_name
+      to: get_ports $output_ports
+      mult: 0
+
+
+
+
+
+      
+
+
