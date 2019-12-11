@@ -1,0 +1,60 @@
+dsn_variables:
+  tx_trce_dly_max:
+    desc: Maximum board trace delay (actually clock-data skew) 
+    default: 0.786      
+    value: 0.786      
+  tx_trce_dly_min:
+    desc:  Minimum board trace delay (actually clock-data skew)
+    default: -0.973      
+    value: -0.973      
+  rx_clk_period:
+    desc: Clock period in ns of the rx clock
+    default: 5      
+    value: 2     
+  rx_clk_name:
+    desc: Desired name of rx clock
+    default: rgmii_rx_clk      
+    value: rgmii_rx_clk      
+  tx_clk_name:
+    desc: Desired name of rx clock
+    default: rgmii_tx_clk        
+    value: rgmii_tx_clk        
+  tx_src_clk_name:
+    desc: Name of tx src clk to use for generating tx clock
+    default: master_clock         
+    value: master_clock         
+  tx_clk_dst_cell_cmd:
+    desc: SDC command to get location of tx clock
+    default: get_pins path/to/clk/start        
+    value: get_pins path/to/clk/start           
+  tx_clk_divide_by:
+    desc: Divider between tx src clk and tx clk
+    default: 1        
+    value: 1        
+  rx_src_clk_name:
+    desc: Name of rx src clk to use for generating tx clock
+    default: master_clock         
+    value: master_clock         
+  rx_clk_dst_cell_cmd:
+    desc: SDC command to get location of rx clock
+    default: get_pins path/to/clk/start            
+    value: get_pins path/to/clk/start          
+  rx_clk_divide_by:
+    desc: Divider between tx src clk and rx clk
+    default: 1        
+    value: 1        
+
+signals:
+  RGMII_RXD[*]: RED_CH_RGMII_RXD[*]
+  RGMII_RX_CTRL: RED_CH_RGMII_RX_CTRL
+  RGMII_RX_CLK: RED_CH_RGMII_RX_CLK
+  RGMII_TX_CLK: RED_CH_RGMII_TX_CLK
+  RGMII_TXD[*]: RED_CH_RGMII_TXD[*]
+  RGMII_TX_CTRL: RED_CH_RGMII_TX_CTRL
+
+part: 'rgmii_part_123'
+
+
+      
+
+

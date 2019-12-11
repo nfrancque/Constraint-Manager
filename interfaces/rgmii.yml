@@ -9,7 +9,7 @@ part_constants:
     default: 2.700
   dv_bre:
     desc: Data valid before rising edge of clock in ns
-    default: 7.660
+    default: 7.660z
   dv_are:
     desc: Data valid after rising edge of clock in ns
     default: 27.789
@@ -81,34 +81,35 @@ constraints:
     # ex: run_sdc_cmd $dsn_var [get_clocks $dsn_clk_var]
   generated_clk:
     tx:
-      clk: $tx_clk_name
-      src_clk_name: $tx_src_clk_name
-      dst_cell_cmd: $tx_clk_dst_cell_cmd
+      clk_name: $tx_clk_name
+      get_src_clk_cmd: $tx_src_clk_name
+      get_dst_clk_cmd: $tx_clk_dst_cell_cmd
       divide_by: $tx_clk_divide_by
     rx:
       clk_name: $rx_clk_name
-      src_clk_name: $rx_src_clk_name
-      dst_cell_cmd: $rx_clk_dst_cell_cmd
+      get_src_clk_cmd: $rx_src_clk_name
+      get_dst_clk_cmd: $rx_clk_dst_cell_cmd
       divide_by: $rx_clk_divide_by
   in_max:
     rx:
       equation: $rx_clk_period-$dv_bre
       signal_group: $input_ports
-      clk_name: $rx_clk_name
+      get_clk_cmd: $rx_clk_name
   out_max:
     tx:
       equation: $trce_dly_max + $tsu
       signal_group: $output_ports
-      clk_name: $tx_clk_name
+      get_clk_cmd: $tx_clk_name
   in_min:
-    equation: $dv_are
-    signal_group: $input_ports
-    clk_name: $rx_clk_name
+    tx:
+      equation: $dv_are
+      signal_group: $input_ports
+      get_clk_cmd: $rx_clk_name
   out_min:
     tx:
       equation: $trce_dly_min - $thd
       signal_group: $output_ports
-      clk_name: $tx_clk_name
+      get_clk_cmd: $tx_clk_name
   mult_path:
     tx:
       from: get_clocks $rx_clk_name
