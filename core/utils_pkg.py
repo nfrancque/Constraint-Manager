@@ -3,5 +3,5 @@ def ppformat(*args):
   return pformat(args, width=200, indent=2, sort_dicts=False)
 
 IF_DIR = '../interfaces'      # TODO : Make this real
-DESIGN_DIR = '../tmp'
+DESIGN_DIR = '../sample'
 PART_DIR = '../parts'
