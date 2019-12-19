@@ -1,5 +1,5 @@
 import yaml
-from .utils_pkg import ppformat
+from .utils_pkg import ppformat, update_from_dict
 from pprint import pprint, pformat
 from copy import copy
 
@@ -41,10 +41,9 @@ class UnimplementedConstraint(Constraint):
 class GeneratedClockConstraint(Constraint):
   def __init__(self, name, props):
     super().__init__(name, props)
-    self.clk_name        = props['clk_name']
-    self.get_src_clk_cmd = props['get_src_clk_cmd']
-    self.get_dst_clk_cmd = props['get_dst_clk_cmd']
-    self.divide_by       = props['divide_by']
+    prop_names = ['clk_name', 'get_src_clk_cmd', 'get_dst_clk_cmd', 'divide_by']
+    update_from_dict(props, self, prop_names)
+
 
   def gen_constraint(self):
     return f'create_generated_clock -name {self.clk_name} -divide_by {self.divide_by} -source {self.get_src_clk_cmd} {self.get_dst_clk_cmd}'
@@ -52,9 +51,9 @@ class GeneratedClockConstraint(Constraint):
 class InputMaxConstraint(Constraint):
   def __init__(self, name, props):
     super().__init__(name, props)
-    self.equation     = props['equation']
-    self.signal_group = props['signal_group']
-    self.get_clk_cmd     = props['get_clk_cmd']
+    prop_names = ['clk_name', 'equation', 'signal_group', 'get_clk_cmd']
+    update_from_dict(props, self, prop_names)
+
   def gen_constraint(self):
 
     return f'set_input_delay -max {self.equation} -clock {self.get_clk_cmd} {self.signal_group}'
