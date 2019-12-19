@@ -1,6 +1,6 @@
 import yaml
-from interface import Interface
-from utils_pkg import ppformat, PART_DIR
+from .interface import Interface
+from .utils_pkg import ppformat, PART_DIR
 from pprint import pprint
 from os.path import splitext, join as path_join
 

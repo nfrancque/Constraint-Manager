@@ -1,7 +1,7 @@
 import yaml
-from interface import Interface
-from part import Part
-from utils_pkg import ppformat, DESIGN_DIR
+from .interface import Interface
+from .part import Part
+from .utils_pkg import ppformat, DESIGN_DIR
 from pprint import pprint
 from os.path import splitext, join as path_join
 from glob import glob
@@ -48,6 +48,8 @@ class Design:
   def parse_yamls(self, yaml_dir):
     self.interfaces = []
     yaml_files = glob(path_join(yaml_dir, '*.yml'))
+    if (yaml_files == []):
+      print(f'Warning:  No yamls found in {yaml_dir}')
     for yaml_file in yaml_files:
       self.parse_yaml(yaml_file)
 

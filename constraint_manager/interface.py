@@ -1,6 +1,6 @@
 import yaml
-from constraint import Constraint
-from utils_pkg import ppformat, IF_DIR
+from .constraint import Constraint
+from .utils_pkg import ppformat, IF_DIR
 from pprint import pprint
 from os.path import join as path_join
 
