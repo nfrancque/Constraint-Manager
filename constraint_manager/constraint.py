@@ -2,22 +2,36 @@ import yaml
 from .utils_pkg import ppformat, update_from_dict
 from pprint import pprint, pformat
 from copy import copy
+import logging
 
-def constraint_kind_to_class():
-  return {
-    'generated_clk' : GeneratedClockConstraint,
-    'in_max'        : InputMaxConstraint
+LOGGER = logging.getLogger(__name__)
 
-  }
+
 
 
 class Constraint:
-  def factory(kind):
+  """ The Constraint class is an abstract class that should never be used directly.
+      It only defines the interface to a constraint.  Instead, use :func:`Constraint.factory`
+      to get a constraint constructor.
 
-    try:
-      return constraint_kind_to_class()[kind]
-    except KeyError:
-      print('Warning: ' + kind + ' is not an implemented constraint.  Try misc?')
+  """
+
+  def factory(kind):
+    """ Factory to generate a concrete constraint constructor.  
+
+        :param kind: The kind of constraint to be created
+        :type kind: string
+        :return: Returns a concrete class generator to be constructed later.
+        :rtype: Class
+  
+    """
+
+    if (kind == 'generated_clk'):
+      return GeneratedClockConstraint
+    elif (kind == 'in_max'):
+      return InputMaxConstraint
+    else:
+      LOGGER.warning(f'Warning: {kind} is not an implemented constraint.  Try misc?')
       return UnimplementedConstraint
   def __init__(self, name, props):
     self.name = name
@@ -29,16 +43,28 @@ class Constraint:
     return str(self)
 
   def gen_constraint(self):
+    """ Generates the sdc constraint string for this constraint.  No variable 
+        substitution is performed, here is it expressed purely in terms of the inputs
+
+        :return: Returns a string containing an sdc command to express this constraint.
+        :rtype: string
+  
+    """
     return None
 
 
 class UnimplementedConstraint(Constraint):
+  """ Unimplemented Constraint class.  Ignored in final design constraints, used mostly as a placeholder.
+  """
   def __init__(self, name, props):
     super().__init__(name, props)
 
 
 
 class GeneratedClockConstraint(Constraint):
+  """ GeneratedClockConstraint class.  Contains information about an sdc create_generated_clk command
+
+  """
   def __init__(self, name, props):
     super().__init__(name, props)
     prop_names = ['clk_name', 'get_src_clk_cmd', 'get_dst_clk_cmd', 'divide_by']
@@ -49,6 +75,9 @@ class GeneratedClockConstraint(Constraint):
     return f'create_generated_clock -name {self.clk_name} -divide_by {self.divide_by} -source {self.get_src_clk_cmd} {self.get_dst_clk_cmd}'
 
 class InputMaxConstraint(Constraint):
+  """ GeneratedClockConstraint class.  Contains information about an sdc set_input_delay -max command
+
+  """
   def __init__(self, name, props):
     super().__init__(name, props)
     prop_names = ['clk_name', 'equation', 'signal_group', 'get_clk_cmd']

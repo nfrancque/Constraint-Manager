@@ -1,23 +1,40 @@
-# Experimental constraint generator
+# Constraint Manager
 
-## General Overview
-Each given interface is governed by one set of equations to determine its input and output delays.
+A simple yaml-based tool for generating sdc interface constraints.  No math involved!
 
-We store them in the tool so that you only have to provide hardware measurements that are actually per design.
+## Goals
 
-As a bonus, we can store part numbers and their info for when parts are reused across designs
+Provide an easy to use tool that requires minimal user input when constraining a design and reduce human error significantly.
 
-Offers ability to map standard equations to your specific design to generate the constraints needed 
+## Current State
 
-Stored in a text format for easy diff tracking - no more annoying binary excel sheets or (gasp) powerpoints
+Rudimentary support for create_generated_clk and set_input_delay -max
 
-Easily hooks into python - hardware team can either edit directly or they edit excel and we auto-update yaml
+Output is created, frameworks all set up, need to refine
 
-## File Overview
-/core contains the parsers/generators
+Sample design/interface/part (not accurate) provided to generate output
 
-/interfaces contains interface definitions - RGMII, SPI, etc.
 
-/parts contains part definitions - reference by some global part number and add properties of its interfaces to be stored
+## TODO
 
-/tmp for now houses what would be stored with a project, the minimum data required to generate the set of constraints given interfaces and parts
+Finish out constraint equations
+
+Get ease of use input from others, especially with the variable substitution
+
+Get documentation built
+
+Make it a GUI?
+
+## Development Guide
+
+To install the module (errors pop up on relative imports when not used as module, current workaround is simply to reinstall for changes):
+
+`python3.8 setup.py install --user`
+
+To use it on the command line:
+
+`constraint-manager -h`
+
+To test:
+
+`pytest`

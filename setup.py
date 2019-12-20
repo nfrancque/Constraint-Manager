@@ -24,8 +24,6 @@ setup(
     	'console_scripts' :[
     	 'constraint-manager=constraint_manager.constraint_manager:main'
     	]
-
-
-
     }
+
 )
