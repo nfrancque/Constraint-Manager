@@ -97,7 +97,7 @@ constraints:
       get_clk_cmd: $rx_clk_name
   out_max:
     tx:
-      equation: $trce_dly_max + $tsu
+      equation: $tx_trce_dly_max + $tsu
       signal_group: $output_ports
       get_clk_cmd: $tx_clk_name
   in_min:
@@ -107,7 +107,7 @@ constraints:
       get_clk_cmd: $rx_clk_name
   out_min:
     tx:
-      equation: $trce_dly_min - $thd
+      equation: $tx_trce_dly_min - $thd
       signal_group: $output_ports
       get_clk_cmd: $tx_clk_name
   mult_path:

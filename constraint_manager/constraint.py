@@ -20,6 +20,12 @@ def get_class_from_string(kind):
     return GeneratedClockConstraint
   elif (kind == 'in_max'):
     return InputMaxConstraint
+  elif (kind == 'in_min'):
+    return InputMinConstraint
+  elif (kind == 'out_max'):
+    return OutputMaxConstraint
+  elif (kind == 'out_min'):
+    return OutputMinConstraint
   else:
     LOGGER.warning(f'{kind} is not an implemented constraint.  Try misc?')
     return UnimplementedConstraint 
@@ -36,7 +42,7 @@ def gen_config_dict():
 
 def _gen_config_dict(kind):
   """ Generates the configuration dictionary for the given constraint kind
-  
+
   :param kind: String representing a constraint kind
   :type kind: str
   :return: A dictionary representing the structure required for input configuration of this constraint.
@@ -110,7 +116,7 @@ class GeneratedClockConstraint(Constraint):
     return f'create_generated_clock -name {self.clk_name} -divide_by {self.divide_by} -source {self.get_src_clk_cmd} {self.get_dst_clk_cmd}'
 
 class InputMaxConstraint(Constraint):
-  """ GeneratedClockConstraint class.  Contains information about an sdc set_input_delay -max command
+  """ InputMaxConstraint class.  Contains information about an sdc set_input_delay -max command
 
   """
   prop_names = ['clk_name', 'equation', 'signal_group', 'get_clk_cmd']
@@ -123,3 +129,48 @@ class InputMaxConstraint(Constraint):
   def gen_constraint(self):
 
     return f'set_input_delay -max {self.equation} -clock {self.get_clk_cmd} {self.signal_group}'
+
+class InputMinConstraint(Constraint):
+  """ InputMinConstraint class.  Contains information about an sdc set_input_delay -min command
+
+  """
+  prop_names = ['clk_name', 'equation', 'signal_group', 'get_clk_cmd']
+
+
+  def __init__(self, name, props):
+    super().__init__(name, props)
+    update_from_dict(props, self, self.prop_names)
+
+  def gen_constraint(self):
+
+    return f'set_input_delay -min {self.equation} -clock {self.get_clk_cmd} {self.signal_group}'
+
+class OutputMaxConstraint(Constraint):
+  """ OutputMaxConstraint class.  Contains information about an sdc set_output_delay -max command
+
+  """
+  prop_names = ['clk_name', 'equation', 'signal_group', 'get_clk_cmd']
+
+
+  def __init__(self, name, props):
+    super().__init__(name, props)
+    update_from_dict(props, self, self.prop_names)
+
+  def gen_constraint(self):
+
+    return f'set_output_delay -max {self.equation} -clock {self.get_clk_cmd} {self.signal_group}'
+
+class OutputMinConstraint(Constraint):
+  """ OutputMinConstraint class.  Contains information about an sdc set_output_delay -min command
+
+  """
+  prop_names = ['clk_name', 'equation', 'signal_group', 'get_clk_cmd']
+
+
+  def __init__(self, name, props):
+    super().__init__(name, props)
+    update_from_dict(props, self, self.prop_names)
+
+  def gen_constraint(self):
+
+    return f'set_output_delay -min {self.equation} -clock {self.get_clk_cmd} {self.signal_group}'

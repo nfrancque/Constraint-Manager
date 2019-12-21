@@ -3,6 +3,7 @@ from .constraint import Constraint, gen_config_dict as constraint_gen_config_dic
 from .utils_pkg import ppformat, get_path_by_name, read_yaml
 from pprint import pprint
 from os.path import join as path_join
+import re
 
 
 def gen_part_config_dict(interface_name):
@@ -227,8 +228,20 @@ class Interface:
       cstr_str = constraint.gen_constraint()
       if cstr_str != None:
         cstr_str = self.variable_sub(cstr_str)
+        cstr_str = self.eval_expressions(cstr_str)
         constraints.append(cstr_str)
     return constraints
+
+  def eval_expressions(self, constraint):
+    pattern = re.compile(r'\-?[0-9\.]+ *[\+\*\-/] *\-?[0-9\.]+')
+    matches = pattern.findall(constraint)
+    for match in matches:
+      evaluated = round(eval(match), 2)
+      constraint = constraint.replace(match, str(evaluated))
+
+
+    return constraint
+
   def variable_sub(self, raw_constraint):
     """ Variable substitution is performed by searching part_constants, dsn_variables, signal_groups, 
         and signals (in that order) and mapping $[var_name] for self.var_type[var_name].value.
