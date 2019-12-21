@@ -1,15 +1,52 @@
 import yaml
-from .constraint import Constraint
-from .utils_pkg import ppformat, IF_DIR
+from .constraint import Constraint, gen_config_dict as constraint_gen_config_dict
+from .utils_pkg import ppformat, get_path_by_name
 from pprint import pprint
 from os.path import join as path_join
+
+
+def gen_part_config_dict(interface_name):
+  interface = Interface(interface_name)
+  return {k : v.__dict__ for (k, v) in interface.part_constants.items()}
+
+def gen_dsn_variables_config_dict(interface_name):
+  interface = Interface(interface_name)
+  return {k : v.__dict__ for (k, v) in interface.dsn_variables.items()}
+
+def gen_signals_config_dict(interface_name):
+  interface = Interface(interface_name)
+  return {k : v.__dict__ for (k, v) in interface.signals.items()}
+
+
+def gen_config_dict():
+
+
+  ret  = {}
+  for prop in ('part_constants', 'dsn_variables'):
+    ret[prop] = {'example_name' : {
+
+      'desc' : 'Some description',
+      'default' : 0
+    }
+  }
+
+  ret['signals'] = ['some_signal']
+  ret['signal_groups'] = {
+    'signal_group' : 'signal_names'
+  }
+
+  ret['constraints'] = constraint_gen_config_dict()
+
+
+  return ret
+
 
 class Interface:
   """ The Interface class defines a protocol interface to a part (RGMII, SPI, etc.).  It contains attributes to help map an interface to constraints.
     
   """
   def __init__(self, if_name):
-    yaml_file = path_join(IF_DIR, if_name + '.yml')
+    yaml_file = get_path_by_name('interfaces', if_name)
     self.parse_yaml(yaml_file)
     self.name = if_name
     # pprint(self, width=1, indent=4)
@@ -151,7 +188,6 @@ class Interface:
         yaml_dict = yaml.safe_load(f)
       except yaml.YAMLError as exc:
         print(exc)
-    # pprint(yaml_dict)
     self.part_constants = self.parse_part_constants(yaml_dict['part_constants'])
     self.dsn_variables = self.parse_dsn_variables(yaml_dict['dsn_variables'])
     self.signals = self.parse_signals(yaml_dict['signals'])
@@ -167,7 +203,6 @@ class Interface:
     constraints = []
     for constraint in self.constraints:
       cstr_str = constraint.gen_constraint()
-      # print(cstr_str)
       if cstr_str != None:
         cstr_str = self.variable_sub(cstr_str)
         constraints.append(cstr_str)

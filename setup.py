@@ -9,7 +9,7 @@ setup(
     # package_dir={
     #     'constraint_manager':'constraint_manager'
     # },
-    package_data={'constraint_manager': ['../interfaces/*', '../parts/*', '../sample/*']},
+    package_data={'constraint_manager': ['../interfaces/*', '../parts/*', '../designs/sample/*']},
     include_package_data=True,
     install_requires=[
     	'PyYAML>=5.2'

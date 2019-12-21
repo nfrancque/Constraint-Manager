@@ -1,5 +1,5 @@
 import pytest
-from constraint_manager.interface import Interface
+from constraint_manager.interface import Interface, gen_config_dict
 from helpers.utils import *
 
 
@@ -21,3 +21,10 @@ def test_interface_props():
 
 
 
+# Configuration dictionary tests
+
+def test_interface_gen_config_dict():
+  config_dict = gen_config_dict()
+  for k, v in config_dict.items():
+    assert(k != None)
+    assert(v != None)
