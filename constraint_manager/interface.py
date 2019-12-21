@@ -1,25 +1,51 @@
 import yaml
 from .constraint import Constraint, gen_config_dict as constraint_gen_config_dict
-from .utils_pkg import ppformat, get_path_by_name
+from .utils_pkg import ppformat, get_path_by_name, read_yaml
 from pprint import pprint
 from os.path import join as path_join
 
 
 def gen_part_config_dict(interface_name):
+  """ Generates the configuration dictionary for a part attempting to implement this interface
+  
+  :param interface_name: The name of the interface to generate a configuration dictionary for
+  :type interface_name: str
+  :return: A dictionary giving all information required for a new part to implement this interface
+  :rtype: dict
+  """
   interface = Interface(interface_name)
   return {k : v.__dict__ for (k, v) in interface.part_constants.items()}
 
 def gen_dsn_variables_config_dict(interface_name):
+  """ Generates the configuration dictionary for a design attempting to implement this interface's design variables
+  
+  :param interface_name: The name of the interface to generate a configuration dictionary for
+  :type interface_name: str
+  :return: A dictionary giving all information required for a new design to implement this interface's design variables
+  :rtype: dict
+  """
   interface = Interface(interface_name)
   return {k : v.__dict__ for (k, v) in interface.dsn_variables.items()}
 
 def gen_signals_config_dict(interface_name):
+  """ Generates the configuration dictionary for a design attempting to implement this interface's signals
+  
+  :param interface_name: The name of the interface to generate a configuration dictionary for
+  :type interface_name: str
+  :return: A dictionary giving all information required for a new design to implement this interface's signals
+  :rtype: dict
+  """
   interface = Interface(interface_name)
   return {k : v.__dict__ for (k, v) in interface.signals.items()}
 
 
 def gen_config_dict():
+  """ Generates the configuration dictionary for a generic interface so that a user can begin modifying it.
+  
 
+  :return: A dictionary giving all information required for a new interface
+  :rtype: dict
+  """
 
   ret  = {}
   for prop in ('part_constants', 'dsn_variables'):
@@ -183,11 +209,7 @@ class Interface:
     :param yaml_file: The filename of the yaml file specifying this interface
     :type from_yaml: str
     """
-    with open(yaml_file, 'r') as f:
-      try:
-        yaml_dict = yaml.safe_load(f)
-      except yaml.YAMLError as exc:
-        LOGGER.info(exc)
+    yaml_dict = read_yaml(yaml_file)
     self.part_constants = self.parse_part_constants(yaml_dict['part_constants'])
     self.dsn_variables = self.parse_dsn_variables(yaml_dict['dsn_variables'])
     self.signals = self.parse_signals(yaml_dict['signals'])

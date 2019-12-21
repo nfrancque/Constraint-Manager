@@ -4,17 +4,14 @@ import logging
 LOGGER = logging.getLogger(__name__)
 
 def list(args):
-  cmd_func = globals()['list_' + args.list_command]
-  listed = cmd_func(args)
+  """ Lists the given information by printing to console
+  
+  :param args: Technically any object, typically comes from an argparse Namespace object, but any that has the required attributes also works
+  :type args: object
+  """
   print(args.list_command.capitalize() + ':')
-  print('\n'.join(listed))
+  print('\n'.join(list_names(args.list_command)))
 
-def list_interfaces(args):
-  return list_names('interfaces')
 
-def list_parts(args):
-  return list_names('parts')
 
-def list_designs(args):
-  return list_names('designs')
 

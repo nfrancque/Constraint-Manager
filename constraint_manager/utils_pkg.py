@@ -34,6 +34,15 @@ def write_yaml(obj, filename):
   with open(filename, 'w+') as f:
     yaml.dump(obj, f, Dumper=MyDumper, sort_keys=False)
 
+def read_yaml(filename):
+  with open(filename, 'r') as f:
+    try:
+      yaml_dict = yaml.safe_load(f)
+    except yaml.YAMLError as exc:
+      LOGGER.info(exc)
+      yaml_dict = {}
+  return yaml_dict
+
 
 
 def list_all(kind, use_local_repo=True):

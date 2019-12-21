@@ -1,11 +1,18 @@
 import yaml
 from .interface import gen_part_config_dict
-from .utils_pkg import ppformat, get_path_by_name
+from .utils_pkg import ppformat, get_path_by_name, read_yaml
 from pprint import pprint
 from os.path import splitext, join as path_join
 
 
 def gen_config_dict(interfaces):
+  """ Generates the configuration dictionary for any part
+  
+  :param interfaces: A list of interfaces the part will be expected to implement
+  :type interfaces: list
+  :return: Returns the configuration dictionary for a part implementing these interfaces
+  :rtype: dict
+  """
   ret = {interface_name: gen_part_config_dict(interface_name) for interface_name in interfaces}
   for interface_name, interface in ret.items():
     for prop_name, prop in interface.items():
@@ -49,11 +56,7 @@ class Part:
     :type yaml_file: string
     """
     self.interfaces = {}
-    with open(yaml_file, 'r') as f:
-      try:
-        yaml_dict = yaml.safe_load(f)
-      except yaml.YAMLError as exc:
-        LOGGER.info(exc)
+    yaml_dict = read_yaml(yaml_file)
     for if_name, props in yaml_dict.items():
       self.interfaces[if_name] = self.parse_interface(props)
 

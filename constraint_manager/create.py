@@ -10,12 +10,22 @@ LOGGER = logging.getLogger(__name__)
 
 
 def create(args):
+  """ Creates the given type of specification
+  
+  :param args: Technically any object, typically comes from an argparse Namespace object, but any that has the required attributes also works
+  :type args: object
+  """
   cmd_func = globals()['create_' + args.create_command]
   cmd_func(args)
   LOGGER.info('Created ' + args.create_command)
 
 
 def create_interface(args):
+  """ Creates an interface.  Given input specification, generates a yaml configuration.
+  
+  :param args: Technically any object, typically comes from an argparse Namespace object, but any that has the required attributes also works
+  :type args: object
+  """
   output_dir = path_join(args.output_dir, 'interfaces')
   interface_name = args.interface_name
   config_dict = if_gen_config_dict()
@@ -25,6 +35,11 @@ def create_interface(args):
   write_yaml(config_dict, output_file)
 
 def create_design(args):
+  """ Creates a design.  Given input specification, generates a yaml configuration.
+  
+  :param args: Technically any object, typically comes from an argparse Namespace object, but any that has the required attributes also works
+  :type args: object
+  """
   output_dir = path_join(args.output_dir, 'designs', args.design_name)
   design_name = args.design_name
   if (not path_exists(output_dir)):
@@ -35,6 +50,11 @@ def create_design(args):
     write_yaml(config_dict, output_file)
 
 def create_part(args):
+  """ Creates a part.  Given input specification, generates a yaml configuration.
+  
+  :param args: Technically any object, typically comes from an argparse Namespace object, but any that has the required attributes also works
+  :type args: object
+  """
   output_dir = path_join(args.output_dir, 'parts')
   part_name = args.part_name
   config_dict = part_gen_config_dict(args.interfaces)

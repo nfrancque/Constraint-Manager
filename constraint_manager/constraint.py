@@ -9,20 +9,39 @@ LOGGER = logging.getLogger(__name__)
 
 
 def get_class_from_string(kind):
-    if (kind == 'generated_clk'):
-      return GeneratedClockConstraint
-    elif (kind == 'in_max'):
-      return InputMaxConstraint
-    else:
-      LOGGER.warning(f'{kind} is not an implemented constraint.  Try misc?')
-      return UnimplementedConstraint 
+  """ Util to get a concrete constraint class from a string specifying the kind of constraint.
+  
+  :param kind: String representing a constraint kind
+  :type kind: str
+  :return: A concrete Constraint class
+  :rtype: Constraint
+  """
+  if (kind == 'generated_clk'):
+    return GeneratedClockConstraint
+  elif (kind == 'in_max'):
+    return InputMaxConstraint
+  else:
+    LOGGER.warning(f'{kind} is not an implemented constraint.  Try misc?')
+    return UnimplementedConstraint 
 
 
 def gen_config_dict():
+  """ Generates the configuration dictionaries for all types of constraints.
+
+  :return: A nested dictionary representing the structure required for input configuration of constraints.
+  :rtype: dict
+  """
   return {kind : _gen_config_dict(kind) for kind in ('generated_clk', 'in_max')}
 
 
 def _gen_config_dict(kind):
+  """ Generates the configuration dictionary for the given constraint kind
+  
+  :param kind: String representing a constraint kind
+  :type kind: str
+  :return: A dictionary representing the structure required for input configuration of this constraint.
+  :rtype: dict
+  """
   prop_names = get_class_from_string(kind).prop_names
   return {'test' : {prop_name : '' for prop_name in prop_names}}
 

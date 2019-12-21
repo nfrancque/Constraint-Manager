@@ -1,7 +1,7 @@
 import yaml
 from .interface import Interface, gen_dsn_variables_config_dict, gen_signals_config_dict
 from .part import Part, gen_config_dict as part_gen_config_dict
-from .utils_pkg import ppformat, get_path_by_name
+from .utils_pkg import ppformat, get_path_by_name, read_yaml
 from pprint import pprint
 from os.path import splitext, join as path_join
 import logging
@@ -76,11 +76,7 @@ class Design:
     file_name, ext = splitext(yaml_file)
     name, interface_name = file_name.rsplit('_', 1)
     interface = Interface(interface_name)
-    with open(yaml_file, 'r') as f:
-      try:
-        yaml_dict = yaml.safe_load(f)
-      except yaml.YAMLError as exc:
-        LOGGER.info(exc)
+    yaml_dict = read_yaml(yaml_file)
 
     self.interfaces.append(self.parse_interface(interface, yaml_dict))
 
