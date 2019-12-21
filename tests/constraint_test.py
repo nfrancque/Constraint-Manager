@@ -41,7 +41,7 @@ def test_input_max_gen_constraint():
 def test_constraint_gen_config_dict():
   config_dicts = constraint.gen_config_dict()
   for kind, config_dict in config_dicts.items():
-    for prop in config_dict.values():
+    for prop in config_dict['test'].values():
       assert(prop == '')
 
 

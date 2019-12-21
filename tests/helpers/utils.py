@@ -1,4 +1,6 @@
 from constraint_manager import constraint
+from constraint_manager.constraint_manager import ConstraintManager
+import sys
 
 def gen_generated_clock_props():
   props                    = {}
@@ -70,3 +72,11 @@ def util_test_gen_constraint(kind):
   expected = get_expected_constraint(kind)
   actual = cstr.gen_constraint()
   assert(expected==actual)
+
+def util_test_constraint_manager(capsys, args):
+  try:
+    cstr_mgr = ConstraintManager(args)
+    out, err = capsys.readouterr()
+    return out, err, True
+  except:
+    return '', sys.exc_info(), False

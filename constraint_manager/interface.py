@@ -187,7 +187,7 @@ class Interface:
       try:
         yaml_dict = yaml.safe_load(f)
       except yaml.YAMLError as exc:
-        print(exc)
+        LOGGER.info(exc)
     self.part_constants = self.parse_part_constants(yaml_dict['part_constants'])
     self.dsn_variables = self.parse_dsn_variables(yaml_dict['dsn_variables'])
     self.signals = self.parse_signals(yaml_dict['signals'])

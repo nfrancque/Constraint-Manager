@@ -35,6 +35,10 @@ To use it on the command line:
 
 `constraint-manager -h`
 
-To test:
+To test for the first time (installs required test modules):
+
+`python3.8 setup.py test`
+
+To fully use framework with all options after setup.py installs, simply use:
 
 `pytest`

@@ -53,7 +53,7 @@ class Part:
       try:
         yaml_dict = yaml.safe_load(f)
       except yaml.YAMLError as exc:
-        print(exc)
+        LOGGER.info(exc)
     for if_name, props in yaml_dict.items():
       self.interfaces[if_name] = self.parse_interface(props)
 

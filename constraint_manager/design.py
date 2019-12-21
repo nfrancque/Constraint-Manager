@@ -80,7 +80,7 @@ class Design:
       try:
         yaml_dict = yaml.safe_load(f)
       except yaml.YAMLError as exc:
-        print(exc)
+        LOGGER.info(exc)
 
     self.interfaces.append(self.parse_interface(interface, yaml_dict))
 
