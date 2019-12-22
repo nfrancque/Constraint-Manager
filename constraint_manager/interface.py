@@ -92,10 +92,10 @@ class Interface:
       self.desc    = props['desc']
       self.default = props['default']
       self.value   = None
-  def __str__(self):
-    return ppformat(self.__dict__)
-  def __repr__(self):
-    return str(self)
+    def __str__(self):
+      return ppformat(self.__dict__)
+    def __repr__(self):
+      return str(self)
 
   class DesignVariable:
     """ The DesignVariable class contains information about values expected to vary for each design that implements this interface.  
@@ -233,6 +233,12 @@ class Interface:
     return constraints
 
   def eval_expressions(self, constraint):
+    """ Searches the constraint for any math that should be evaluated as a result of variable substitution.
+    :param constraint:  A string that may or may not contain math to be evaluated
+    :type constraint: str
+    :return: Returns a string after all math (if applicable) has been performed
+    :rtype: str
+    """
     pattern = re.compile(r'\-?[0-9\.]+ *[\+\*\-/] *\-?[0-9\.]+')
     matches = pattern.findall(constraint)
     for match in matches:
@@ -250,7 +256,7 @@ class Interface:
     :param raw_constraint: The string containing the sdc constraint before variable substitution.
     :type raw_constraint: str
     :return: Returns a string after all variable substitutions have been performed.
-    :rtype: dict
+    :rtype: str
     """
     constraint = raw_constraint
     for prop in ['part_constants', 'dsn_variables', 'signal_groups', 'signals']:
@@ -264,7 +270,7 @@ class Interface:
     :param prop: A string matching the attribute name of this instance to look in for variable substitution.
     :type prop: str
     :return: Returns a string after all variable substitutions have been performed.
-    :rtype: dict
+    :rtype: str
     """
     constraint = raw_constraint
     for name, obj in getattr(self,prop).items():

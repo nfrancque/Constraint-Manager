@@ -8,22 +8,26 @@ Provide an easy to use tool that requires minimal user input when constraining a
 
 ## Current State
 
-Rudimentary support for create_generated_clk and set_input_delay -max
+All but mult_path constraints implemented
 
-Output is created, frameworks all set up, need to refine
+Can create, list, and generate from cli
 
 Sample design/interface/part (not accurate) provided to generate output
 
 
 ## TODO
 
-Finish out constraint equations
+Validate constraint equations
+
+Get real example to see if numbers match up
+
 
 Get ease of use input from others, especially with the variable substitution
 
 Get documentation built
 
 Make it a GUI?
+
 
 ## Development Guide
 

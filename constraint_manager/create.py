@@ -15,6 +15,7 @@ def create(args):
   :param args: Technically any object, typically comes from an argparse Namespace object, but any that has the required attributes also works
   :type args: object
   """
+  # Delegate work to specific sub function
   cmd_func = globals()['create_' + args.create_command]
   cmd_func(args)
   LOGGER.info('Created ' + args.create_command)

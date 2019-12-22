@@ -2,6 +2,7 @@ import argparse
 from .utils_pkg import list_names
 
 def parse_args(argv):
+
   # Top level parser
   parser = argparse.ArgumentParser(description='Manages constraint specifications and generates sdc constraints. ')
   parser.add_argument('--log-level', default = 'info', help='Configures internal logging level.  ', choices=['info', 'error', 'warning', 'debug', 'critical'])
@@ -38,6 +39,9 @@ def parse_args(argv):
   list_parser     = subparsers.add_parser('list', help='List information from tool repository')
   list_parser.add_argument('list_command', help='Which type of information to list', choices=['interfaces', 'parts', 'designs'])
   
+
+
+
   args = parser.parse_args(args=argv)
   
   return args
