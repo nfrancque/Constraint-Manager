@@ -7,11 +7,14 @@ from . import cli, create, generate, list
 
 
 class ConstraintManager:
-    """ The ConstraintManager class implements the frontend interface to the constraint manager.
-            It primarily control input/output locations.
-            By default it searches in a repository contained in the tool and `pwd`/constraint_manager_out (default export location).
-            Set the environment variable CONSTRAINT_MANAGER_LOCAL_REPO to modify the location of the latter.
+    """The ConstraintManager class implements the frontend interface to the
+    constraint manager.
 
+    It primarily control input/output locations. By default it searches
+    in a repository contained in the tool and
+    `pwd`/constraint_manager_out (default export location). Set the
+    environment variable CONSTRAINT_MANAGER_LOCAL_REPO to modify the
+    location of the latter.
     """
 
     def __init__(self, argv=None):
@@ -31,9 +34,7 @@ class ConstraintManager:
 
     @staticmethod
     def _configure_logging(log_level):
-        """
-        Configure logging based on log_level string
-        """
+        """Configure logging based on log_level string."""
         level = getattr(logging, log_level.upper())
         logging.basicConfig(
             filename=None, format="%(levelname)7s - %(message)s", level=level

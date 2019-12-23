@@ -7,7 +7,8 @@ LOGGER = logging.getLogger(__name__)
 
 
 def get_class_from_string(kind):
-    """ Util to get a concrete constraint class from a string specifying the kind of constraint.
+    """Util to get a concrete constraint class from a string specifying the
+    kind of constraint.
 
     :param kind: String representing a constraint kind
     :type kind: str
@@ -30,9 +31,9 @@ def get_class_from_string(kind):
 
 
 def gen_config_dict():
-    """ Generates the configuration dictionaries for all types of constraints.
+    """Generates the configuration dictionaries for all types of constraints.
 
-    :return: A nested dictionary representing the structure required for input configuration of constraints.
+    :return: A nested dictionary for input configuration of constraints.
     :rtype: dict
     """
     return {kind: _gen_config_dict(kind)
@@ -40,11 +41,11 @@ def gen_config_dict():
 
 
 def _gen_config_dict(kind):
-    """ Generates the configuration dictionary for the given constraint kind
+    """Generates the configuration dictionary for the given constraint kind.
 
     :param kind: String representing a constraint kind
     :type kind: str
-    :return: A dictionary representing the structure required for input configuration of this constraint.
+    :return: A dictionary for input configuration of this constraint.
     :rtype: dict
     """
     prop_names = get_class_from_string(kind).prop_names
@@ -52,22 +53,22 @@ def _gen_config_dict(kind):
 
 
 def factory(kind):
-    """ Factory to generate a concrete constraint constructor.
+    """Factory to generate a concrete constraint constructor.
 
     :param kind: The kind of constraint to be created
     :type kind: string
     :return: Returns a concrete class generator to be constructed later.
     :rtype: Class
-
     """
     return get_class_from_string(kind)
 
 
 class Constraint:
-    """ The Constraint class is an abstract class that should never be used directly.
-            It only defines the interface to a constraint.  Instead, use :func:`Constraint.factory`
-            to get a constraint constructor.
+    """The Constraint class is an abstract class that should never be used
+    directly.
 
+    It only defines the interface to a constraint.  Instead, use
+    :func:`Constraint.factory` to get a constraint constructor.
     """
 
     def __init__(self, name, props):
@@ -82,18 +83,20 @@ class Constraint:
         return str(self)
 
     def gen_constraint(self):
-        """ Generates the sdc constraint string for this constraint.  No variable
-                substitution is performed, here is it expressed purely in terms of the inputs
+        """Generates the sdc constraint string for this constraint.  No
+        variable substitution is performed, here is it expressed purely in
+        terms of the inputs.
 
-                :return: Returns a string containing an sdc command to express this constraint.
-                :rtype: string
-
+        :return: Returns a string containing an sdc command to express this constraint.
+        :rtype: string
         """
         return None
 
 
 class UnimplementedConstraint(Constraint):
-    """ Unimplemented Constraint class.  Ignored in final design constraints, used mostly as a placeholder.
+    """Unimplemented Constraint class.
+
+    Ignored in final design constraints, used mostly as a placeholder.
     """
     prop_names = []
 
@@ -102,8 +105,9 @@ class UnimplementedConstraint(Constraint):
 
 
 class GeneratedClockConstraint(Constraint):
-    """ GeneratedClockConstraint class.  Contains information about an sdc create_generated_clk command
+    """GeneratedClockConstraint class.
 
+    Contains information about an sdc create_generated_clk command
     """
     prop_names = ['clk_name', 'get_src_clk_cmd',
                   'get_dst_clk_cmd', 'divide_by']
@@ -113,12 +117,14 @@ class GeneratedClockConstraint(Constraint):
         update_from_dict(props, self, self.prop_names)
 
     def gen_constraint(self):
+        # pylint: disable=no-member
         return f'create_generated_clock -name {self.clk_name} -divide_by {self.divide_by} -source {self.get_src_clk_cmd} {self.get_dst_clk_cmd}'
 
 
 class InputMaxConstraint(Constraint):
-    """ InputMaxConstraint class.  Contains information about an sdc set_input_delay -max command
+    """InputMaxConstraint class.
 
+    Contains information about an sdc set_input_delay -max command
     """
     prop_names = ['clk_name', 'equation', 'signal_group', 'get_clk_cmd']
 
@@ -127,13 +133,14 @@ class InputMaxConstraint(Constraint):
         update_from_dict(props, self, self.prop_names)
 
     def gen_constraint(self):
-
+        # pylint: disable=no-member
         return f'set_input_delay -max {self.equation} -clock {self.get_clk_cmd} {self.signal_group}'
 
 
 class InputMinConstraint(Constraint):
-    """ InputMinConstraint class.  Contains information about an sdc set_input_delay -min command
+    """InputMinConstraint class.
 
+    Contains information about an sdc set_input_delay -min command
     """
     prop_names = ['clk_name', 'equation', 'signal_group', 'get_clk_cmd']
 
@@ -142,13 +149,14 @@ class InputMinConstraint(Constraint):
         update_from_dict(props, self, self.prop_names)
 
     def gen_constraint(self):
-
+        # pylint: disable=no-member
         return f'set_input_delay -min {self.equation} -clock {self.get_clk_cmd} {self.signal_group}'
 
 
 class OutputMaxConstraint(Constraint):
-    """ OutputMaxConstraint class.  Contains information about an sdc set_output_delay -max command
+    """OutputMaxConstraint class.
 
+    Contains information about an sdc set_output_delay -max command
     """
     prop_names = ['clk_name', 'equation', 'signal_group', 'get_clk_cmd']
 
@@ -157,13 +165,14 @@ class OutputMaxConstraint(Constraint):
         update_from_dict(props, self, self.prop_names)
 
     def gen_constraint(self):
-
+        # pylint: disable=no-member
         return f'set_output_delay -max {self.equation} -clock {self.get_clk_cmd} {self.signal_group}'
 
 
 class OutputMinConstraint(Constraint):
-    """ OutputMinConstraint class.  Contains information about an sdc set_output_delay -min command
+    """OutputMinConstraint class.
 
+    Contains information about an sdc set_output_delay -min command
     """
     prop_names = ['clk_name', 'equation', 'signal_group', 'get_clk_cmd']
 
@@ -172,5 +181,5 @@ class OutputMinConstraint(Constraint):
         update_from_dict(props, self, self.prop_names)
 
     def gen_constraint(self):
-
+        # pylint: disable=no-member
         return f'set_output_delay -min {self.equation} -clock {self.get_clk_cmd} {self.signal_group}'

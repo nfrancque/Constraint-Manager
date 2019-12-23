@@ -6,7 +6,7 @@ LOGGER = logging.getLogger(__name__)
 
 
 def list(args):
-    """ Lists the given information by printing to console
+    """Lists the given information by printing to console.
 
     :param args: Technically any object, typically comes from an argparse Namespace object, but any that has the required attributes also works
     :type args: object

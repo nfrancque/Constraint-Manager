@@ -3,7 +3,7 @@ from .utils_pkg import get_path_by_name, ppformat, read_yaml
 
 
 def gen_config_dict(interfaces):
-    """ Generates the configuration dictionary for any part
+    """Generates the configuration dictionary for any part.
 
     :param interfaces: A list of interfaces the part will be expected to implement
     :type interfaces: list
@@ -19,8 +19,11 @@ def gen_config_dict(interfaces):
 
 
 class Part:
-    """The Part class contains information about a part that interfaces with an FPGA.  A part may have one or more interfaces defined,
-         and must provide all pre-defined part constants for that interface.
+    """The Part class contains information about a part that interfaces with an
+    FPGA.
+
+    A part may have one or more interfaces defined, and must provide all
+    pre-defined part constants for that interface.
     """
 
     def __init__(self, part_name):
@@ -35,7 +38,8 @@ class Part:
         return str(self)
 
     def parse_interface(self, from_yaml):
-        """ Parses an interface of this part and returns the properties of that interface
+        """Parses an interface of this part and returns the properties of that
+        interface.
 
         :param from_yaml: dictionary containing all properties for the given interface
         :type from_yaml: dict
@@ -48,7 +52,7 @@ class Part:
         return interface
 
     def parse_yaml(self, yaml_file):
-        """ Parses the given yaml file describing a part into a Part object
+        """Parses the given yaml file describing a part into a Part object.
 
         :param yaml_file: The filename of the yaml description
         :type yaml_file: string

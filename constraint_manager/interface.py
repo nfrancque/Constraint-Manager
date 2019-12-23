@@ -6,11 +6,12 @@ from .utils_pkg import get_path_by_name, ppformat, read_yaml
 
 
 def gen_part_config_dict(interface_name):
-    """ Generates the configuration dictionary for a part attempting to implement this interface
+    """Generates the configuration dictionary for a part attempting to
+    implement this interface.
 
     :param interface_name: The name of the interface to generate a configuration dictionary for
     :type interface_name: str
-    :return: A dictionary giving all information required for a new part to implement this interface
+    :return: Config dict for a new part to use interface
     :rtype: dict
     """
     interface = Interface(interface_name)
@@ -18,11 +19,12 @@ def gen_part_config_dict(interface_name):
 
 
 def gen_dsn_variables_config_dict(interface_name):
-    """ Generates the configuration dictionary for a design attempting to implement this interface's design variables
+    """Generates the configuration dictionary for a design attempting to
+    implement this interface's design variables.
 
     :param interface_name: The name of the interface to generate a configuration dictionary for
     :type interface_name: str
-    :return: A dictionary giving all information required for a new design to implement this interface's design variables
+    :return: Config dict for a new design to use interface's design variables
     :rtype: dict
     """
     interface = Interface(interface_name)
@@ -30,11 +32,12 @@ def gen_dsn_variables_config_dict(interface_name):
 
 
 def gen_signals_config_dict(interface_name):
-    """ Generates the configuration dictionary for a design attempting to implement this interface's signals
+    """Generates the configuration dictionary for a design attempting to
+    implement this interface's signals.
 
     :param interface_name: The name of the interface to generate a configuration dictionary for
     :type interface_name: str
-    :return: A dictionary giving all information required for a new design to implement this interface's signals
+    :return: Config dict for a new design to use interface's signals
     :rtype: dict
     """
     interface = Interface(interface_name)
@@ -42,8 +45,8 @@ def gen_signals_config_dict(interface_name):
 
 
 def gen_config_dict():
-    """ Generates the configuration dictionary for a generic interface so that a user can begin modifying it.
-
+    """Generates the configuration dictionary for a generic interface so that a
+    user can begin modifying it.
 
     :return: A dictionary giving all information required for a new interface
     :rtype: dict
@@ -56,8 +59,8 @@ def gen_config_dict():
 
                 'desc': 'Some description',
                 'default': 0
-                }
             }
+        }
 
     ret['signals'] = ['some_signal']
     ret['signal_groups'] = {
@@ -70,8 +73,10 @@ def gen_config_dict():
 
 
 class Interface:
-    """ The Interface class defines a protocol interface to a part (RGMII, SPI, etc.).  It contains attributes to help map an interface to constraints.
+    """The Interface class defines a protocol interface to a part (RGMII, SPI,
+    etc.).
 
+    It contains attributes to help map an interface to constraints.
     """
 
     def __init__(self, if_name):
@@ -87,8 +92,13 @@ class Interface:
         return str(self)
 
     class PartConstant:
-        """ The PartConstant class contains information about values that are expected to be constant in this interface for any given part we are interfacing with.
-                We can therefore reference a part from the repository and not require the user to input those values to generate the constraint
+        """The PartConstant class contains information about values that are
+        expected to be constant in this interface for any given part we are
+        interfacing with.
+
+        We can therefore reference a part from the repository and not
+        require the user to input those values to generate the
+        constraint
         """
 
         def __init__(self, name, props):
@@ -104,8 +114,8 @@ class Interface:
             return str(self)
 
     class DesignVariable:
-        """ The DesignVariable class contains information about values expected to vary for each design that implements this interface.
-        """
+        """The DesignVariable class contains information about values expected
+        to vary for each design that implements this interface."""
 
         def __init__(self, name, props):
 
@@ -121,9 +131,9 @@ class Interface:
             return str(self)
 
     class SignalGroup:
-        """ The SignalGroup class specifies a mapping of generic group names for this interface to actual groups of signals in the design to be able to generically specify
-                the constraint equation in terms of its groups.
-        """
+        """The SignalGroup class specifies a mapping of generic group names for
+        this interface to actual groups of signals in the design to be able to
+        generically specify the constraint equation in terms of its groups."""
 
         def __init__(self, name, props):
             self.name = name
@@ -136,9 +146,9 @@ class Interface:
             return str(self)
 
     class Signal:
-        """ The Signal class specifies a mapping of generic signal names for this interface to actual signals in the design to be able to generically specify
-                the constraint equation in terms of its signals.
-        """
+        """The Signal class specifies a mapping of generic signal names for
+        this interface to actual signals in the design to be able to
+        generically specify the constraint equation in terms of its signals."""
 
         def __init__(self, name):
             self.name = name
@@ -151,9 +161,9 @@ class Interface:
             return str(self)
 
     def parse_part_constants(self, from_yaml):
-        """ Parses the part constants of this interface.
+        """Parses the part constants of this interface.
 
-        :param from_yaml: A nested dictionary mapping part constant names to their information.  See :class:`constraint_manager.Interface.PartConstant for props formatting.
+        :param from_yaml: Props dicts See :class:`PartConstant` for props formatting.
         :type from_yaml: dict
         :return: Returns a dictionary of PartConstant variables mapped by name
         :rtype: dict
@@ -164,9 +174,9 @@ class Interface:
         return part_constants
 
     def parse_dsn_variables(self, from_yaml):
-        """ Parses the part constants of this interface.
+        """Parses the part constants of this interface.
 
-        :param from_yaml: A nested dictionary mapping design variables to their information.  See :class:`constraint_manager.Interface.DesignVariable for props formatting.
+        :param from_yaml: Props dicts See :class:`DesignVariable` for props formatting.
         :type from_yaml: dict
         :return: Returns a dictionary of DesignVariable variables mapped by name
         :rtype: dict
@@ -177,9 +187,9 @@ class Interface:
         return dsn_variables
 
     def parse_signals(self, from_yaml):
-        """ Parses the signals of this interface.
+        """Parses the signals of this interface.
 
-        :param from_yaml: A nested dictionary mapping signals to their information.  See :class:`constraint_manager.Interface.Signal for props formatting.
+        :param from_yaml: See :class:`Signal for props formatting.
         :type from_yaml: dict
         :return: Returns a dictionary of Signal variables mapped by name
         :rtype: dict
@@ -190,9 +200,9 @@ class Interface:
         return signals
 
     def parse_signal_groups(self, from_yaml):
-        """ Parses the signal groups of this interface.
+        """Parses the signal groups of this interface.
 
-        :param from_yaml: A nested dictionary mapping signal groups to their information.  See :class:`constraint_manager.Interface.SignalGroupo for props formatting.
+        :param from_yaml: See :class:`SignalGroup` for props formatting.
         :type from_yaml: dict
         :return: Returns a dictionary of SignalGroup variables mapped by name
         :rtype: dict
@@ -203,9 +213,9 @@ class Interface:
         return signal_groups
 
     def parse_constraints(self, from_yaml):
-        """ Parses the signals of this interface.
+        """Parses the signals of this interface.
 
-        :param from_yaml: A nested dictionary mapping kinds of constraints->concrete constraint type, which is itself a dictionary of constraints by name.  See :class:`constraint_manager.Interface.Signal for props formatting.
+        :param from_yaml: Nested constraints dict.  See :class:`Signal` for props formatting.
         :type from_yaml: dict
         :return: Returns a dictionary of Constraint variables mapped by name
         :rtype: dict
@@ -218,7 +228,7 @@ class Interface:
         return constraints
 
     def parse_yaml(self, yaml_file):
-        """ Parses the yaml file for this interface.
+        """Parses the yaml file for this interface.
 
         :param yaml_file: The filename of the yaml file specifying this interface
         :type from_yaml: str
@@ -234,8 +244,10 @@ class Interface:
         self.constraints = self.parse_constraints(yaml_dict['constraints'])
 
     def gen_constraints(self):
-        """ Generates all constraints for this interface.  Variable subsitution is performed as per :func:`constraint_manager.Interface.variable_sub`
-                Expressed as a list of constraint lines to later be put into a string for export.
+        """Generates all constraints for this interface.  Variable subsitution
+        is performed as per :func:`constraint_manager.Interface.variable_sub`
+        Expressed as a list of constraint lines to later be put into a string
+        for export.
 
         :return: Returns a list of strings each containing a valid sdc constraint
         :rtype: dict
@@ -250,7 +262,9 @@ class Interface:
         return constraints
 
     def eval_expressions(self, constraint):
-        """ Searches the constraint for any math that should be evaluated as a result of variable substitution.
+        """Searches the constraint for any math that should be evaluated as a
+        result of variable substitution.
+
         :param constraint:  A string that may or may not contain math to be evaluated
         :type constraint: str
         :return: Returns a string after all math (if applicable) has been performed
@@ -265,11 +279,13 @@ class Interface:
         return constraint
 
     def variable_sub(self, raw_constraint):
-        """ Variable substitution is performed by searching part_constants, dsn_variables, signal_groups,
-                and signals (in that order) and mapping $[var_name] for self.var_type[var_name].value.
-                Where var_type is one of the above mentioned attributes, and var_name is any key
-                in their dictionaries.
-        :param raw_constraint: The string containing the sdc constraint before variable substitution.
+        """Variable substitution is performed by searching part_constants,
+        dsn_variables, signal_groups, and signals (in that order) and mapping
+        $[var_name] for self.var_type[var_name].value. Where var_type is one of
+        the above mentioned attributes, and var_name is any key in their
+        dictionaries.
+
+        :param raw_constraint: The sdc constraint before variable substitution.
         :type raw_constraint: str
         :return: Returns a string after all variable substitutions have been performed.
         :rtype: str
@@ -282,10 +298,12 @@ class Interface:
         return constraint
 
     def _variable_sub(self, raw_constraint, prop):
-        """ Performs the actual variable substitution on the constraint for a given instance attribute.
-        :param raw_constraint: The string containing the sdc constraint before variable substitution.
+        """Performs the actual variable substitution on the constraint for a
+        given instance attribute.
+
+        :param raw_constraint: The sdc constraint before variable substitution.
         :type raw_constraint: str
-        :param prop: A string matching the attribute name of this instance to look in for variable substitution.
+        :param prop: The name of the member to replace
         :type prop: str
         :return: Returns a string after all variable substitutions have been performed.
         :rtype: str

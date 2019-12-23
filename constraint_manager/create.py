@@ -12,9 +12,9 @@ LOGGER = logging.getLogger(__name__)
 
 
 def create(args):
-    """ Creates the given type of specification
+    """Creates the given type of specification.
 
-    :param args: Technically any object, typically comes from an argparse Namespace object, but any that has the required attributes also works
+    :param args: An object with all required members for this function.  TODO: Document
     :type args: object
     """
     # Delegate work to specific sub function
@@ -24,9 +24,10 @@ def create(args):
 
 
 def create_interface(args):
-    """ Creates an interface.  Given input specification, generates a yaml configuration.
+    """Creates an interface.  Given input specification, generates a yaml
+    configuration.
 
-    :param args: Technically any object, typically comes from an argparse Namespace object, but any that has the required attributes also works
+    :param args: An object with all required members for this function.  TODO: Document
     :type args: object
     """
     output_dir = path_join(args.output_dir, 'interfaces')
@@ -39,9 +40,10 @@ def create_interface(args):
 
 
 def create_design(args):
-    """ Creates a design.  Given input specification, generates a yaml configuration.
+    """Creates a design.  Given input specification, generates a yaml
+    configuration.
 
-    :param args: Technically any object, typically comes from an argparse Namespace object, but any that has the required attributes also works
+    :param args: An object with all required members for this function.  TODO: Document
     :type args: object
     """
     output_dir = path_join(args.output_dir, 'designs', args.design_name)
@@ -56,9 +58,10 @@ def create_design(args):
 
 
 def create_part(args):
-    """ Creates a part.  Given input specification, generates a yaml configuration.
+    """Creates a part.  Given input specification, generates a yaml
+    configuration.
 
-    :param args: Technically any object, typically comes from an argparse Namespace object, but any that has the required attributes also works
+    :param args: An object with all required members for this function.  TODO: Document
     :type args: object
     """
     output_dir = path_join(args.output_dir, 'parts')
