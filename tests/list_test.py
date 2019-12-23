@@ -1,8 +1,9 @@
-import pytest
-from constraint_manager import list
-from helpers.utils import *
 import sys
 
+import pytest
+
+from constraint_manager import list
+from helpers.utils import *
 
 
 class Object(object):
@@ -23,6 +24,3 @@ def test_list_designs():
   obj.list_command = 'designs'
   out = list.list(obj)
   assert(out != '')
-
-
-

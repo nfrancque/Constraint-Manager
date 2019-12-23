@@ -1,9 +1,8 @@
-import yaml
-from .constraint import Constraint, gen_config_dict as constraint_gen_config_dict, factory as constraint_factory
-from .utils_pkg import ppformat, get_path_by_name, read_yaml
-from pprint import pprint
-from os.path import join as path_join
 import re
+
+from .constraint import factory as constraint_factory
+from .constraint import gen_config_dict as constraint_gen_config_dict
+from .utils_pkg import get_path_by_name, ppformat, read_yaml
 
 
 def gen_part_config_dict(interface_name):
@@ -15,7 +14,8 @@ def gen_part_config_dict(interface_name):
     :rtype: dict
     """
     interface = Interface(interface_name)
-    return {k : v.__dict__ for (k, v) in interface.part_constants.items()}
+    return {k: v.__dict__ for (k, v) in interface.part_constants.items()}
+
 
 def gen_dsn_variables_config_dict(interface_name):
     """ Generates the configuration dictionary for a design attempting to implement this interface's design variables
@@ -26,7 +26,8 @@ def gen_dsn_variables_config_dict(interface_name):
     :rtype: dict
     """
     interface = Interface(interface_name)
-    return {k : v.__dict__ for (k, v) in interface.dsn_variables.items()}
+    return {k: v.__dict__ for (k, v) in interface.dsn_variables.items()}
+
 
 def gen_signals_config_dict(interface_name):
     """ Generates the configuration dictionary for a design attempting to implement this interface's signals
@@ -37,7 +38,7 @@ def gen_signals_config_dict(interface_name):
     :rtype: dict
     """
     interface = Interface(interface_name)
-    return {k : v.__dict__ for (k, v) in interface.signals.items()}
+    return {k: v.__dict__ for (k, v) in interface.signals.items()}
 
 
 def gen_config_dict():
@@ -48,22 +49,22 @@ def gen_config_dict():
     :rtype: dict
     """
 
-    ret  = {}
+    ret = {}
     for prop in ('part_constants', 'dsn_variables'):
-        ret[prop] = {'example_name' : {
+        ret[prop] = {
+            'example_name': {
 
-            'desc' : 'Some description',
-            'default' : 0
-        }
-    }
+                'desc': 'Some description',
+                'default': 0
+                }
+            }
 
     ret['signals'] = ['some_signal']
     ret['signal_groups'] = {
-        'signal_group' : 'signal_names'
+        'signal_group': 'signal_names'
     }
 
     ret['constraints'] = constraint_gen_config_dict()
-
 
     return ret
 
@@ -72,13 +73,16 @@ class Interface:
     """ The Interface class defines a protocol interface to a part (RGMII, SPI, etc.).  It contains attributes to help map an interface to constraints.
 
     """
+
     def __init__(self, if_name):
         yaml_file = get_path_by_name('interfaces', if_name)
         self.parse_yaml(yaml_file)
         self.name = if_name
         # pprint(self, width=1, indent=4)
+
     def __str__(self):
         return ppformat(self.__dict__)
+
     def __repr__(self):
         return str(self)
 
@@ -88,26 +92,31 @@ class Interface:
         """
 
         def __init__(self, name, props):
-            self.name    = name
-            self.desc    = props['desc']
+            self.name = name
+            self.desc = props['desc']
             self.default = props['default']
-            self.value   = None
+            self.value = None
+
         def __str__(self):
             return ppformat(self.__dict__)
+
         def __repr__(self):
             return str(self)
 
     class DesignVariable:
         """ The DesignVariable class contains information about values expected to vary for each design that implements this interface.
         """
+
         def __init__(self, name, props):
 
-            self.name    = name
-            self.desc    = props['desc']
+            self.name = name
+            self.desc = props['desc']
             self.default = props['default']
-            self.value   = None
+            self.value = None
+
         def __str__(self):
             return ppformat(self.__dict__)
+
         def __repr__(self):
             return str(self)
 
@@ -115,11 +124,14 @@ class Interface:
         """ The SignalGroup class specifies a mapping of generic group names for this interface to actual groups of signals in the design to be able to generically specify
                 the constraint equation in terms of its groups.
         """
+
         def __init__(self, name, props):
-            self.name  = name
+            self.name = name
             self.value = props
+
         def __str__(self):
             return ppformat(self.__dict__)
+
         def __repr__(self):
             return str(self)
 
@@ -127,14 +139,16 @@ class Interface:
         """ The Signal class specifies a mapping of generic signal names for this interface to actual signals in the design to be able to generically specify
                 the constraint equation in terms of its signals.
         """
+
         def __init__(self, name):
-            self.name        = name
-            self.value       = None
+            self.name = name
+            self.value = None
+
         def __str__(self):
             return ppformat(self.__dict__)
+
         def __repr__(self):
             return str(self)
-
 
     def parse_part_constants(self, from_yaml):
         """ Parses the part constants of this interface.
@@ -203,7 +217,6 @@ class Interface:
                 constraints.append(concrete_constraint(name, props))
         return constraints
 
-
     def parse_yaml(self, yaml_file):
         """ Parses the yaml file for this interface.
 
@@ -211,11 +224,15 @@ class Interface:
         :type from_yaml: str
         """
         yaml_dict = read_yaml(yaml_file)
-        self.part_constants = self.parse_part_constants(yaml_dict['part_constants'])
-        self.dsn_variables = self.parse_dsn_variables(yaml_dict['dsn_variables'])
+        self.part_constants = self.parse_part_constants(
+            yaml_dict['part_constants'])
+        self.dsn_variables = self.parse_dsn_variables(
+            yaml_dict['dsn_variables'])
         self.signals = self.parse_signals(yaml_dict['signals'])
-        self.signal_groups = self.parse_signal_groups(yaml_dict['signal_groups'])
+        self.signal_groups = self.parse_signal_groups(
+            yaml_dict['signal_groups'])
         self.constraints = self.parse_constraints(yaml_dict['constraints'])
+
     def gen_constraints(self):
         """ Generates all constraints for this interface.  Variable subsitution is performed as per :func:`constraint_manager.Interface.variable_sub`
                 Expressed as a list of constraint lines to later be put into a string for export.
@@ -226,7 +243,7 @@ class Interface:
         constraints = []
         for constraint in self.constraints:
             cstr_str = constraint.gen_constraint()
-            if cstr_str != None:
+            if cstr_str is not None:
                 cstr_str = self.variable_sub(cstr_str)
                 cstr_str = self.eval_expressions(cstr_str)
                 constraints.append(cstr_str)
@@ -245,7 +262,6 @@ class Interface:
             evaluated = round(eval(match), 2)
             constraint = constraint.replace(match, str(evaluated))
 
-
         return constraint
 
     def variable_sub(self, raw_constraint):
@@ -259,10 +275,12 @@ class Interface:
         :rtype: str
         """
         constraint = raw_constraint
-        for prop in ['part_constants', 'dsn_variables', 'signal_groups', 'signals']:
+        for prop in ['part_constants', 'dsn_variables',
+                     'signal_groups', 'signals']:
             constraint = self._variable_sub(constraint, prop)
 
         return constraint
+
     def _variable_sub(self, raw_constraint, prop):
         """ Performs the actual variable substitution on the constraint for a given instance attribute.
         :param raw_constraint: The string containing the sdc constraint before variable substitution.
@@ -273,10 +291,6 @@ class Interface:
         :rtype: str
         """
         constraint = raw_constraint
-        for name, obj in getattr(self,prop).items():
+        for name, obj in getattr(self, prop).items():
             constraint = constraint.replace('$' + name, str(obj.value))
         return constraint
-
-
-
-

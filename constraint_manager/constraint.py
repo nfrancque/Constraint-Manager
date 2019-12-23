@@ -1,11 +1,9 @@
-import yaml
-from .utils_pkg import ppformat, update_from_dict
-from pprint import pprint, pformat
-from copy import copy
 import logging
+from copy import copy
+
+from .utils_pkg import ppformat, update_from_dict
 
 LOGGER = logging.getLogger(__name__)
-
 
 
 def get_class_from_string(kind):
@@ -37,7 +35,8 @@ def gen_config_dict():
     :return: A nested dictionary representing the structure required for input configuration of constraints.
     :rtype: dict
     """
-    return {kind : _gen_config_dict(kind) for kind in ('generated_clk', 'in_max')}
+    return {kind: _gen_config_dict(kind)
+            for kind in ('generated_clk', 'in_max')}
 
 
 def _gen_config_dict(kind):
@@ -49,7 +48,7 @@ def _gen_config_dict(kind):
     :rtype: dict
     """
     prop_names = get_class_from_string(kind).prop_names
-    return {'test' : {prop_name : '' for prop_name in prop_names}}
+    return {'test': {prop_name: '' for prop_name in prop_names}}
 
 
 def factory(kind):
@@ -63,6 +62,7 @@ def factory(kind):
     """
     return get_class_from_string(kind)
 
+
 class Constraint:
     """ The Constraint class is an abstract class that should never be used directly.
             It only defines the interface to a constraint.  Instead, use :func:`Constraint.factory`
@@ -70,14 +70,14 @@ class Constraint:
 
     """
 
-
-
     def __init__(self, name, props):
         self.name = name
+
     def __str__(self):
-        ret = {'constraint_type' : self.__class__.__name__}
+        ret = {'constraint_type': self.__class__.__name__}
         ret.update(copy(self.__dict__))
         return ppformat(ret)
+
     def __repr__(self):
         return str(self)
 
@@ -101,28 +101,26 @@ class UnimplementedConstraint(Constraint):
         super().__init__(name, props)
 
 
-
 class GeneratedClockConstraint(Constraint):
     """ GeneratedClockConstraint class.  Contains information about an sdc create_generated_clk command
 
     """
-    prop_names = ['clk_name', 'get_src_clk_cmd', 'get_dst_clk_cmd', 'divide_by']
-
+    prop_names = ['clk_name', 'get_src_clk_cmd',
+                  'get_dst_clk_cmd', 'divide_by']
 
     def __init__(self, name, props):
         super().__init__(name, props)
         update_from_dict(props, self, self.prop_names)
 
-
     def gen_constraint(self):
         return f'create_generated_clock -name {self.clk_name} -divide_by {self.divide_by} -source {self.get_src_clk_cmd} {self.get_dst_clk_cmd}'
+
 
 class InputMaxConstraint(Constraint):
     """ InputMaxConstraint class.  Contains information about an sdc set_input_delay -max command
 
     """
     prop_names = ['clk_name', 'equation', 'signal_group', 'get_clk_cmd']
-
 
     def __init__(self, name, props):
         super().__init__(name, props)
@@ -132,12 +130,12 @@ class InputMaxConstraint(Constraint):
 
         return f'set_input_delay -max {self.equation} -clock {self.get_clk_cmd} {self.signal_group}'
 
+
 class InputMinConstraint(Constraint):
     """ InputMinConstraint class.  Contains information about an sdc set_input_delay -min command
 
     """
     prop_names = ['clk_name', 'equation', 'signal_group', 'get_clk_cmd']
-
 
     def __init__(self, name, props):
         super().__init__(name, props)
@@ -147,12 +145,12 @@ class InputMinConstraint(Constraint):
 
         return f'set_input_delay -min {self.equation} -clock {self.get_clk_cmd} {self.signal_group}'
 
+
 class OutputMaxConstraint(Constraint):
     """ OutputMaxConstraint class.  Contains information about an sdc set_output_delay -max command
 
     """
     prop_names = ['clk_name', 'equation', 'signal_group', 'get_clk_cmd']
-
 
     def __init__(self, name, props):
         super().__init__(name, props)
@@ -162,12 +160,12 @@ class OutputMaxConstraint(Constraint):
 
         return f'set_output_delay -max {self.equation} -clock {self.get_clk_cmd} {self.signal_group}'
 
+
 class OutputMinConstraint(Constraint):
     """ OutputMinConstraint class.  Contains information about an sdc set_output_delay -min command
 
     """
     prop_names = ['clk_name', 'equation', 'signal_group', 'get_clk_cmd']
-
 
     def __init__(self, name, props):
         super().__init__(name, props)

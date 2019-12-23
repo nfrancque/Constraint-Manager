@@ -1,45 +1,46 @@
-import yaml
-from .interface import Interface, gen_dsn_variables_config_dict, gen_signals_config_dict
-from .part import Part, gen_config_dict as part_gen_config_dict
-from .utils_pkg import ppformat, get_path_by_name, read_yaml
-from pprint import pprint
-from os.path import splitext, join as path_join
 import logging
 from glob import glob
+from os.path import join as path_join
+from os.path import splitext
 
+from .interface import (Interface, gen_dsn_variables_config_dict,
+                        gen_signals_config_dict)
+from .part import Part
+from .utils_pkg import get_path_by_name, ppformat, read_yaml
 
 LOGGER = logging.getLogger(__name__)
 
 
 def gen_config_dict(interface_names):
-    return {interface_name : _gen_config_dict(interface_name) for interface_name in interface_names}
+    return {interface_name: _gen_config_dict(
+        interface_name) for interface_name in interface_names}
 
 
 def _gen_config_dict(interface_name):
     dsn_variables_config_dict = gen_dsn_variables_config_dict(interface_name)
-    signals_config_dict =  gen_signals_config_dict(interface_name)
+    signals_config_dict = gen_signals_config_dict(interface_name)
     ret = {}
     ret['part'] = 'some_part'
     ret['dsn_variables'] = dsn_variables_config_dict
     for _, dsn_variable in ret['dsn_variables'].items():
         dsn_variable['value'] = dsn_variable['default']
-    ret['signals'] = {signal : '' for signal in signals_config_dict}
+    ret['signals'] = {signal: '' for signal in signals_config_dict}
     return ret
-
-
 
 
 class Design:
     """ The Design class contains information about a full design, which may implement many interfaces.
 
     """
+
     def __init__(self, design_name):
         self.parse_yamls(design_name)
+
     def __str__(self):
         return ppformat(self.__dict__)
+
     def __repr__(self):
         return str(self)
-
 
     def parse_interface(self, interface, from_yaml):
         """ Parses all information about a given interface in this design and updates the given Interface.
@@ -62,9 +63,7 @@ class Design:
         for part_constant, value in part_constants.items():
             interface.part_constants[part_constant].value = value
 
-
         return interface
-
 
     def parse_yaml(self, yaml_file):
         """ Parses a given yaml file and adds to list of interfaces for this design.
@@ -73,13 +72,12 @@ class Design:
         :type yaml_file: str
         """
 
-        file_name, ext = splitext(yaml_file)
-        name, interface_name = file_name.rsplit('_', 1)
+        file_name, _ = splitext(yaml_file)
+        _, interface_name = file_name.rsplit('_', 1)
         interface = Interface(interface_name)
         yaml_dict = read_yaml(yaml_file)
 
         self.interfaces.append(self.parse_interface(interface, yaml_dict))
-
 
     def parse_yamls(self, design_name):
         """ Parses all yaml files in the specified directory.
@@ -108,7 +106,3 @@ class Design:
             constraints.extend(if_constraints)
         constraints = '\n'.join(constraints) + '\n'
         return constraints
-
-
-
-

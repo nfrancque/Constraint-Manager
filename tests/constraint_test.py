@@ -1,4 +1,5 @@
 import pytest
+
 from constraint_manager import constraint
 from helpers.utils import *
 
@@ -43,9 +44,3 @@ def test_constraint_gen_config_dict():
   for kind, config_dict in config_dicts.items():
     for prop in config_dict['test'].values():
       assert(prop == '')
-
-
-
-
-
-

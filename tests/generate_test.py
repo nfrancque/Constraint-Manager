@@ -1,8 +1,9 @@
-import pytest
-from constraint_manager import generate
-from helpers.utils import *
 import sys
 
+import pytest
+
+from constraint_manager import generate
+from helpers.utils import *
 
 
 class Object(object):
@@ -16,7 +17,3 @@ def test_generate_all():
   obj.design_name = 'sample'
   out = generate.generate(obj)
   assert(out != '')
-
-
-
-

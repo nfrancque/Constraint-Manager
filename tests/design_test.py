@@ -1,4 +1,5 @@
 import pytest
+
 from constraint_manager.design import Design, Interface, gen_config_dict
 from helpers.utils import *
 

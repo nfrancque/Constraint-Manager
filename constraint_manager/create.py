@@ -1,10 +1,12 @@
-from os.path import join as path_join, exists as path_exists
-from .utils_pkg import write_yaml
+import logging
+from os import makedirs
+from os.path import exists as path_exists
+from os.path import join as path_join
+
+from .design import gen_config_dict as dsn_gen_config_dict
 from .interface import gen_config_dict as if_gen_config_dict
 from .part import gen_config_dict as part_gen_config_dict
-from .design import gen_config_dict as dsn_gen_config_dict
-from os import makedirs
-import logging
+from .utils_pkg import write_yaml
 
 LOGGER = logging.getLogger(__name__)
 
@@ -35,6 +37,7 @@ def create_interface(args):
         makedirs(output_dir, exist_ok=True)
     write_yaml(config_dict, output_file)
 
+
 def create_design(args):
     """ Creates a design.  Given input specification, generates a yaml configuration.
 
@@ -47,8 +50,10 @@ def create_design(args):
         makedirs(output_dir, exist_ok=True)
     config_dicts = dsn_gen_config_dict(args.interfaces)
     for interface, config_dict in config_dicts.items():
-        output_file = path_join(output_dir, design_name + '_' + interface + '.yaml')
+        output_file = path_join(
+            output_dir, design_name + '_' + interface + '.yaml')
         write_yaml(config_dict, output_file)
+
 
 def create_part(args):
     """ Creates a part.  Given input specification, generates a yaml configuration.

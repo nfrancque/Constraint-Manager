@@ -1,4 +1,5 @@
 import pytest
+
 from constraint_manager.part import Part, gen_config_dict
 from helpers.utils import *
 

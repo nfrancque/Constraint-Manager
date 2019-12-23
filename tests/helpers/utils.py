@@ -1,6 +1,8 @@
+import sys
+
 from constraint_manager import constraint
 from constraint_manager.constraint_manager import ConstraintManager
-import sys
+
 
 def gen_generated_clock_props():
   props                    = {}

@@ -1,7 +1,9 @@
-from .design import Design
 import logging
 
+from .design import Design
+
 LOGGER = logging.getLogger(__name__)
+
 
 def generate(args):
     """ Generates constraints of the specified design

@@ -1,11 +1,9 @@
-import argparse
-from . import cli, generate, create, list
-from glob import glob
-from os.path import join as path_join, exists as path_exists, dirname, basename, splitext
-from os import makedirs, environ, getcwd
-from pprint import pprint
-import sys
 import logging
+import sys
+from os import environ, getcwd
+from os.path import join as path_join
+
+from . import cli, create, generate, list
 
 
 class ConstraintManager:
@@ -15,10 +13,12 @@ class ConstraintManager:
             Set the environment variable CONSTRAINT_MANAGER_LOCAL_REPO to modify the location of the latter.
 
     """
+
     def __init__(self, argv=None):
         if 'CONSTRAINT_MANAGER_LOCAL_REPO' not in environ:
-            environ['CONSTRAINT_MANAGER_LOCAL_REPO'] = path_join(getcwd(), 'constraint_manager_out')
-        if argv == None:
+            environ['CONSTRAINT_MANAGER_LOCAL_REPO'] = path_join(
+                getcwd(), 'constraint_manager_out')
+        if argv is None:
             argv = sys.argv[1:]
 
         args = cli.parse_args(argv)
@@ -28,7 +28,6 @@ class ConstraintManager:
         # of the form command.command()
         cmd_function = getattr(globals()[args.command], args.command)
         cmd_function(args)
-
 
     @staticmethod
     def _configure_logging(log_level):
@@ -40,13 +39,10 @@ class ConstraintManager:
             filename=None, format="%(levelname)7s - %(message)s", level=level
         )
 
+
 def main():
     # console_scripts tags onto main func, do not remove
     constraint_manager = ConstraintManager()
-
-
-
-
 
 
 if __name__ == '__main__':

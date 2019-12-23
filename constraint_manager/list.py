@@ -1,7 +1,9 @@
-from .utils_pkg import list_names
 import logging
 
+from .utils_pkg import list_names
+
 LOGGER = logging.getLogger(__name__)
+
 
 def list(args):
     """ Lists the given information by printing to console
@@ -11,7 +13,3 @@ def list(args):
     """
     print(args.list_command.capitalize() + ':')
     print('\n'.join(list_names(args.list_command)))
-
-
-
-

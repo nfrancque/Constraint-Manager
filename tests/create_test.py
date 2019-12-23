@@ -1,9 +1,12 @@
+import sys
+from os.path import exists as path_exists
+from os.path import join as path_join
+from shutil import rmtree
+
 import pytest
+
 from constraint_manager import create
 from helpers.utils import *
-import sys
-from os.path import join as path_join, exists as path_exists
-from shutil import rmtree
 
 
 class Object(object):
@@ -39,8 +42,3 @@ def test_create_design():
   out = create.create(obj)
   assert(path_exists(path_join('tmp', 'designs', 'test', 'test_rgmii.yaml')))
   rmtree('tmp')
-
-
-
-
-

@@ -1,8 +1,7 @@
 import pytest
+
 from constraint_manager.interface import Interface, gen_config_dict
 from helpers.utils import *
-
-
 
 interface = Interface('rgmii')
 
