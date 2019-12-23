@@ -2,6 +2,22 @@
 
 A simple yaml-based tool for generating sdc interface constraints.  No math involved!
 
+
+## Usage
+For immediate usage, try:
+
+`constraint-manager generate test`
+
+This will use a sample interface, part, and design to generate some constraints (not yet validated)
+
+To create new specifications, use 
+
+`constraint-manager create`
+
+and through the cli you can create a new interface, part, and design that reference each other and use generate to test them.
+
+
+
 ## Goals
 
 Provide an easy to use tool that requires minimal user input when constraining a design and reduce human error significantly.

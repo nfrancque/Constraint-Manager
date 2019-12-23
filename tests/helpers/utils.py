@@ -32,7 +32,7 @@ def gen_constraint_props(kind):
 constraint_name = 'test'
 
 def get_constraint_instance(kind):
-  cstr_factory = constraint.Constraint.factory(kind)
+  cstr_factory = constraint.factory(kind)
   props = gen_constraint_props(kind)
   cstr = cstr_factory(constraint_name, props)
   return cstr
