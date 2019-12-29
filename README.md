@@ -47,6 +47,12 @@ Make it a GUI?
 
 ## Development Guide
 
+Prerequisites:
+
+`~/.local/bin` must be in $PATH (python installs binaries here)
+setuptools must be installed
+
+
 To install the module (errors pop up on relative imports when not used as module, current workaround is simply to reinstall for changes):
 
 `python3.8 setup.py install --user`

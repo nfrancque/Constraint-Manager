@@ -67,6 +67,8 @@ def list_all(kind, use_local_repo=True):
                 path_join(environ.get('CONSTRAINT_MANAGER_LOCAL_REPO'), kind)))
         except TypeError:
             pass
+        except FileNotFoundError:
+            pass
     return ret
 
 
