@@ -1,10 +1,10 @@
 import argparse
 
 from .utils_pkg import list_names
+import argcomplete
 
 
-def parse_args(argv):
-
+def get_parser():
     # Top level parser
     parser = argparse.ArgumentParser(
         description='Manages constraint specifications and generates sdc constraints. ')
@@ -96,6 +96,4 @@ def parse_args(argv):
             'parts',
             'designs'])
 
-    args = parser.parse_args(args=argv)
-
-    return args
+    return parser

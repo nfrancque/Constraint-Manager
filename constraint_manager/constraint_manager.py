@@ -1,7 +1,13 @@
+#!/usr/bin/env python
+# PYTHON_ARGCOMPLETE_OK
+
+
 import logging
 import sys
 from os import environ, getcwd
 from os.path import join as path_join
+
+import argcomplete
 
 from . import cli, create, generate, list
 
@@ -17,20 +23,19 @@ class ConstraintManager:
     location of the latter.
     """
 
-    def __init__(self, argv=None):
-        if 'CONSTRAINT_MANAGER_LOCAL_REPO' not in environ:
-            environ['CONSTRAINT_MANAGER_LOCAL_REPO'] = path_join(
-                getcwd(), 'constraint_manager_out')
-        if argv is None:
-            argv = sys.argv[1:]
+    def __init__(self, args):
+        self.args = args
 
-        args = cli.parse_args(argv)
         self._configure_logging(args.log_level)
 
+
+
+
+    def run(self):
         # This is a little obfuscated, but grabs the function to call for the command
         # of the form command.command()
-        cmd_function = getattr(globals()[args.command], args.command)
-        cmd_function(args)
+        cmd_function = getattr(globals()[self.args.command], self.args.command)
+        cmd_function(self.args)      
 
     @staticmethod
     def _configure_logging(log_level):
@@ -41,9 +46,22 @@ class ConstraintManager:
         )
 
 
-def main():
-    # console_scripts tags onto main func, do not remove
-    constraint_manager = ConstraintManager()
+def get_parser():
+    return cli.get_parser()
+
+
+def main(args=None):
+    if 'CONSTRAINT_MANAGER_LOCAL_REPO' not in environ:
+        environ['CONSTRAINT_MANAGER_LOCAL_REPO'] = path_join(
+            getcwd(), 'constraint_manager_out')
+
+    if (args == None):
+        parser = get_parser()
+        argcomplete.autocomplete(parser)
+        args = parser.parse_args()
+    constraint_manager = ConstraintManager(args)
+    constraint_manager.run()
+
 
 
 if __name__ == '__main__':

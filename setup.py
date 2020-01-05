@@ -17,7 +17,8 @@ setup(
     package_data={'constraint_manager': ['../interfaces/*', '../parts/*', '../designs/sample/*']},
     include_package_data=True,
     install_requires=[
-    	'PyYAML>=5.2'
+    	'PyYAML',
+        'argcomplete'
     ],
     setup_requires=[
         'pytest-runner'

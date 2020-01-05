@@ -2,19 +2,37 @@
 
 A simple yaml-based tool for generating sdc interface constraints.  No math involved!
 
+## Installation
+
+Prerequisites:
+
+`setuptools`
+
+To install the module
+
+`python3.8 setup.py install`
 
 ## Usage
 For immediate usage, try:
 
-`constraint-manager generate test`
+`constraint-manager generate sample`
 
-This will use a sample interface, part, and design to generate some constraints (not yet validated)
+This will use a sample interface, part, and design to generate some constraints (not yet validated) and just print them to the console.
 
-To create new specifications, use 
+An example flow for generating your own interface, part and design:
 
-`constraint-manager create`
+```
+constraint-manager create interface test
+constraint-manager create part test --interfaces test
+constraint-manager create design test --interfaces test
+```
+Manually edit constraint\_manager\_out/designs/test_test.yaml to say `part: test`
 
-and through the cli you can create a new interface, part, and design that reference each other and use generate to test them.
+`constraint-manager create design test --interfaces test`
+
+The generated constraints will ber empty, but this shows the flow and you can manually modify the yaml's to your liking to try out something new - be sure to regenerate parts and designs after modifying an interface.
+
+Ideally, all local repositories will be merged back upstream to store them in the tool.  This is where the real benefit of it comes into play.
 
 
 
@@ -33,33 +51,29 @@ Sample design/interface/part (not accurate) provided to generate output
 
 ## TODO
 
-Validate constraint equations
+[] Validate constraint equations
 
-Get real example to see if numbers match up
+[] Get real example to see if numbers match up
+
+[] Improve unit testing
+
+[] Get ease of use input from others, especially with the variable substitution
+
+[] Get documentation built
+
+[] Programmatic editing of configuration files
+
+[] Figure out why argcomplete doesn't work
 
 
-Get ease of use input from others, especially with the variable substitution
+[] Better design generation - give interfaces a name, set part at creation time
 
-Get documentation built
-
-Make it a GUI?
+[] Make it a GUI?
 
 
 ## Development Guide
 
-Prerequisites:
-
-`~/.local/bin` must be in $PATH (python installs binaries here)
-setuptools must be installed
-
-
-To install the module (errors pop up on relative imports when not used as module, current workaround is simply to reinstall for changes):
-
-`python3.8 setup.py install --user`
-
-To use it on the command line:
-
-`constraint-manager -h`
+Constraint Manager uses pytest.
 
 To test for the first time (installs required test modules):
 
@@ -68,3 +82,8 @@ To test for the first time (installs required test modules):
 To fully use framework with all options after setup.py installs, simply use:
 
 `pytest`
+
+## Contributing
+
+I welcome any and all contributions.  The tests in particular need overhauled, they are only very simple sanity checks as of now.
+
