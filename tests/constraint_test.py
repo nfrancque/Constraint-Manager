@@ -6,7 +6,7 @@ from helpers.utils import *
 # Identity tests
 
 def test_unimplemented_identity():
-  util_test_constraint_identity('blah', constraint.UnimplementedConstraint)
+  util_test_constraint_identity('blah', constraint.Constraint)
 
 def test_generated_clock_identity():
   util_test_constraint_identity('generated_clk', constraint.GeneratedClockConstraint)

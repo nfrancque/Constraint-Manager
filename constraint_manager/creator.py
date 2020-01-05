@@ -1,3 +1,8 @@
+""" Implements creation of interfaces, designs, and parts
+Writes out configuration data to yaml files
+"""
+
+
 import logging
 from os import makedirs
 from os.path import exists as path_exists
@@ -20,7 +25,7 @@ def create(args):
     # Delegate work to specific sub function
     cmd_func = globals()['create_' + args.create_command]
     cmd_func(args)
-    LOGGER.info('Created ' + args.create_command)
+    LOGGER.info('Created %s', args.create_command)
 
 
 def create_interface(args):

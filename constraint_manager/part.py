@@ -1,3 +1,9 @@
+""" Part abstraction, tightly coupled to an interface.
+Provides part constant values to a design and can generate
+a configuration dictionary for doing so.
+
+"""
+
 from .interface import gen_part_config_dict
 from .utils_pkg import get_path_by_name, ppformat, read_yaml
 
@@ -37,6 +43,7 @@ class Part:
     def __repr__(self):
         return str(self)
 
+    # pylint: disable=no-self-use
     def parse_interface(self, from_yaml):
         """Parses an interface of this part and returns the properties of that
         interface.

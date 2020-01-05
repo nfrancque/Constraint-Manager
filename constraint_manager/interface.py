@@ -1,3 +1,10 @@
+""" Implements an interface abstraction.
+Capable of holding information about an interface,
+and generating a list of constraints representing it.
+Will also generate a configuration dictionary to represent
+the default state of a given interface
+"""
+
 import re
 
 from .constraint import factory as constraint_factory
@@ -212,6 +219,7 @@ class Interface:
             signal_groups[name] = self.SignalGroup(name, props)
         return signal_groups
 
+    # pylint: disable=no-self-use
     def parse_constraints(self, from_yaml):
         """Parses the signals of this interface.
 
@@ -273,7 +281,7 @@ class Interface:
         pattern = re.compile(r'\-?[0-9\.]+ *[\+\*\-/] *\-?[0-9\.]+')
         matches = pattern.findall(constraint)
         for match in matches:
-            evaluated = round(eval(match), 2)
+            evaluated = round(eval(match), 2) #pylint: disable=eval-used
             constraint = constraint.replace(match, str(evaluated))
 
         return constraint
