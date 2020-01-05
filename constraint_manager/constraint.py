@@ -1,3 +1,8 @@
+""" Implements a constraint abstraction using an abstract class
+implemented by several concrete types.  Given a property dictionary
+is designed to generate a constraint string to represent itself.
+"""
+
 import logging
 from copy import copy
 
@@ -26,8 +31,8 @@ def get_class_from_string(kind):
     if kind == 'out_min':
         return OutputMinConstraint
 
-    LOGGER.warning(f'{kind} is not an implemented constraint.  Try misc?')
-    return UnimplementedConstraint
+    LOGGER.warning('%s is not an implemented constraint.  Try misc?', kind)
+    return Constraint
 
 
 def gen_config_dict():
@@ -70,7 +75,7 @@ class Constraint:
     It only defines the interface to a constraint.  Instead, use
     :func:`Constraint.factory` to get a constraint constructor.
     """
-
+    # pylint:disable=unused-argument
     def __init__(self, name, props):
         self.name = name
 
@@ -82,6 +87,7 @@ class Constraint:
     def __repr__(self):
         return str(self)
 
+    # pylint:disable=no-self-use
     def gen_constraint(self):
         """Generates the sdc constraint string for this constraint.  No
         variable substitution is performed, here is it expressed purely in
@@ -93,17 +99,7 @@ class Constraint:
         return None
 
 
-class UnimplementedConstraint(Constraint):
-    """Unimplemented Constraint class.
-
-    Ignored in final design constraints, used mostly as a placeholder.
-    """
-    prop_names = []
-
-    def __init__(self, name, props):
-        super().__init__(name, props)
-
-
+#pylint:disable=too-few-public-methods
 class GeneratedClockConstraint(Constraint):
     """GeneratedClockConstraint class.
 
@@ -118,9 +114,12 @@ class GeneratedClockConstraint(Constraint):
 
     def gen_constraint(self):
         # pylint: disable=no-member
-        return f'create_generated_clock -name {self.clk_name} -divide_by {self.divide_by} -source {self.get_src_clk_cmd} {self.get_dst_clk_cmd}'
+        return (f'create_generated_clock -name {self.clk_name} '
+                f'-divide_by {self.divide_by} -source {self.get_src_clk_cmd} '
+                f'{self.get_dst_clk_cmd}'
+               )
 
-
+#pylint:disable=too-few-public-methods
 class InputMaxConstraint(Constraint):
     """InputMaxConstraint class.
 
@@ -134,9 +133,11 @@ class InputMaxConstraint(Constraint):
 
     def gen_constraint(self):
         # pylint: disable=no-member
-        return f'set_input_delay -max {self.equation} -clock {self.get_clk_cmd} {self.signal_group}'
+        return (f'set_input_delay -max {self.equation} '
+                f'-clock {self.get_clk_cmd} {self.signal_group}'
+               )
 
-
+#pylint:disable=too-few-public-methods
 class InputMinConstraint(Constraint):
     """InputMinConstraint class.
 
@@ -150,9 +151,11 @@ class InputMinConstraint(Constraint):
 
     def gen_constraint(self):
         # pylint: disable=no-member
-        return f'set_input_delay -min {self.equation} -clock {self.get_clk_cmd} {self.signal_group}'
+        return (f'set_input_delay -min {self.equation} '
+                f'-clock {self.get_clk_cmd} {self.signal_group}'
+               )
 
-
+#pylint:disable=too-few-public-methods
 class OutputMaxConstraint(Constraint):
     """OutputMaxConstraint class.
 
@@ -166,9 +169,11 @@ class OutputMaxConstraint(Constraint):
 
     def gen_constraint(self):
         # pylint: disable=no-member
-        return f'set_output_delay -max {self.equation} -clock {self.get_clk_cmd} {self.signal_group}'
+        return (f'set_output_delay -max {self.equation} '
+                f'-clock {self.get_clk_cmd} {self.signal_group}'
+               )
 
-
+#pylint:disable=too-few-public-methods
 class OutputMinConstraint(Constraint):
     """OutputMinConstraint class.
 
@@ -182,4 +187,6 @@ class OutputMinConstraint(Constraint):
 
     def gen_constraint(self):
         # pylint: disable=no-member
-        return f'set_output_delay -min {self.equation} -clock {self.get_clk_cmd} {self.signal_group}'
+        return (f'set_output_delay -min {self.equation} '
+                f'-clock {self.get_clk_cmd} {self.signal_group}'
+               )

@@ -1,10 +1,19 @@
+""" Implements the cli definition, which at the moment is just
+returning a parser.
+"""
+
+
 import argparse
 
 from .utils_pkg import list_names
-import argcomplete
-
 
 def get_parser():
+    """ Get an argument parser instance with all subparsers set up
+
+    :return: and argument parser
+    :rtype: argparse.ArgumentParser
+    """
+
     # Top level parser
     parser = argparse.ArgumentParser(
         description='Manages constraint specifications and generates sdc constraints. ')
