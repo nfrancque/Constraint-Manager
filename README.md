@@ -8,9 +8,11 @@ Prerequisites:
 
 `setuptools`
 
+`Python>=3.6`
+
 To install the module
 
-`python3.8 setup.py install`
+`python setup.py install`
 
 ## Usage
 For immediate usage, try:
