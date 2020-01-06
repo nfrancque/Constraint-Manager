@@ -28,9 +28,9 @@ constraint-manager create design test --interfaces test
 ```
 Manually edit constraint\_manager\_out/designs/test_test.yaml to say `part: test`
 
-`constraint-manager create design test --interfaces test`
+`constraint-manager generate test`
 
-The generated constraints will ber empty, but this shows the flow and you can manually modify the yaml's to your liking to try out something new - be sure to regenerate parts and designs after modifying an interface.
+The generated constraints will be empty, but this shows the flow and you can manually modify the yaml's to your liking to try out something new - be sure to regenerate parts and designs after modifying an interface.
 
 Ideally, all local repositories will be merged back upstream to store them in the tool.  This is where the real benefit of it comes into play.
 
@@ -51,24 +51,23 @@ Sample design/interface/part (not accurate) provided to generate output
 
 ## TODO
 
-[] Validate constraint equations
+- [ ] Validate constraint equations
 
-[] Get real example to see if numbers match up
+- [ ] Get real example to see if numbers match up
 
-[] Improve unit testing
+- [ ] Improve unit testing
 
-[] Get ease of use input from others, especially with the variable substitution
+- [ ] Get ease of use input from others, especially with the variable substitution
 
-[] Get documentation built
+- [ ] Get documentation built
 
-[] Programmatic editing of configuration files
+- [ ] Programmatic editing of configuration files
 
-[] Figure out why argcomplete doesn't work
+- [ ] Figure out why argcomplete doesn't work
 
+- [ ] Better design generation - give interfaces a name, set part at creation time
 
-[] Better design generation - give interfaces a name, set part at creation time
-
-[] Make it a GUI?
+- [ ] Make it a GUI?
 
 
 ## Development Guide
