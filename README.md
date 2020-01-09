@@ -1,6 +1,9 @@
+[![Gitter](https://badges.gitter.im/Constraint-Manager/constraint-manager.svg)](https://gitter.im/Constraint-Manager/constraint-manager?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
+
 # Constraint Manager
 
 A simple yaml-based tool for generating sdc interface constraints.  No math involved!
+
 
 ## Installation
 
